@@ -36,7 +36,7 @@ done
 VALID_IP_RE='^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9‌​]{2}|2[0-4][0-9]|25[0-5])$'
 VALID_HOSTNAME_RE='^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$'
 
-while [[ ! $ADDRESS =~ $ $VALID_IP_RE ]]
+while [[ ! $ADDRESS =~ $VALID_IP_RE ]]
 do
         read -p "$(echo -e "Adresse IP statique : ")" ADDRESS
 done

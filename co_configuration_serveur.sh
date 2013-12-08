@@ -54,6 +54,7 @@ done
 
 ################ Début du processus
 yum -y uprade
+yum -y install wget
 
 # Désactivation de Selinux
 sed -i "s/^\(SELINUX=\).*$/\1disabled/" /etc/selinux/config

@@ -46,18 +46,18 @@ do
         read -p "$(echo -e "Adresse IP passerelle : ")" GATEWAY
 done
 
-while [[ ! $DOMAIN =~ $VALID_HOSTNAME_RE ]
+while [[ ! $DOMAIN =~ $VALID_HOSTNAME_RE ]]
 do
         read -p "$(echo -e "Domaine : ")" DOMAIN
 done
 
-while [[ ! $HOST_NAME =~ $VALID_HOSTNAME_RE ]
+while [[ ! $HOST_NAME =~ $VALID_HOSTNAME_RE ]]
 do
         read -p "$(echo -e "Nom du serveur : ")" HOST_NAME
 done
 
 ################ Début du processus
-yum -y uprade
+yum -y upgrade
 yum -y install wget
 
 # Désactivation de Selinux

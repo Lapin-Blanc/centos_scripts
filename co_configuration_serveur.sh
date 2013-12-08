@@ -81,9 +81,9 @@ EOF
 fi
 . /root/.bashrc
 yum -y install vim
-echo "set expandtab
-set ts=4
-set sw=4" >> /etc/vimrc
+if ! grep -q -e "set expandtab" /etc/vimrc ; then echo "set expandtab" >> /etc/vimrc ; fi
+if ! grep -q -e "set ts=4" /etc/vimrc ; then echo "set ts=4" >> /etc/vimrc ; fi
+if ! grep -q -e "set sw=4" /etc/vimrc ; then echo "set sw=4" >> /etc/vimrc ; fi
 
 # Configuration réseau
 # - installation des utilitaires réseaux tui
@@ -94,7 +94,6 @@ PREFIX=24
 #HOSTNAME=serveur
 #DOMAIN=toune.be
 DOMAINNAME=$HOST_NAME.$DOMAIN
-# yum -y install system-config-{firewall,network}-tui
 
 # passe en adressage dynamique
 sed -i "s/^\(BOOTPROTO=\).*$/\1none/" /etc/sysconfig/network-scripts/ifcfg-eth0
@@ -178,6 +177,7 @@ if ! grep -e "--dport 80" /etc/sysconfig/iptables
 then
     sed  -i '/--dport 22/{h;s//--dport 80/;H;x}' /etc/sysconfig/iptables
 fi
+# redémarrage des services
 service iptables restart
 service httpd restart
 chkconfig httpd on
@@ -196,8 +196,11 @@ fi
 # Chargement du module ip_nat_ftp de iptables
 sed -i "s/^\([^#]*\)ip_nat_ftp\s*\(.*\)$/\1\2/g" /etc/sysconfig/iptables-config
 sed -i "s/^\(IPTABLES_MODULES=\"\)\(.*$\)/\1ip_nat_ftp \2/" /etc/sysconfig/iptables-config
+
+# redémarrage des services
 service iptables restart
 chkconfig vsftpd on
 service vsftpd start
 
+# redémarrage du système
 reboot

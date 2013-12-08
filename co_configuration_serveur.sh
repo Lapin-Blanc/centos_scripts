@@ -33,6 +33,7 @@ while [ "$1" != "" ]; do
     esac
     shift
 done
+
 VALID_IP_RE='^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9‌​]{2}|2[0-4][0-9]|25[0-5])$'
 VALID_HOSTNAME_RE='^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$'
 
@@ -40,17 +41,17 @@ while [[ ! $ADDRESS =~ $VALID_IP_RE ]]
 do
         read -p "$(echo -e "Adresse IP statique : ")" ADDRESS
 done
-while [ -z $GATEWAY ]
+while [[ ! $GATEWAY =~ $VALID_IP_RE ]]
 do
         read -p "$(echo -e "Adresse IP passerelle : ")" GATEWAY
 done
 
-while [ -z $DOMAIN ]
+while [[ ! $DOMAIN =~ $VALID_HOSTNAME_RE ]
 do
         read -p "$(echo -e "Domaine : ")" DOMAIN
 done
 
-while [ -z $HOST_NAME ]
+while [[ ! $HOST_NAME =~ $VALID_HOSTNAME_RE ]
 do
         read -p "$(echo -e "Nom du serveur : ")" HOST_NAME
 done

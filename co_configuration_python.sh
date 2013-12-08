@@ -58,3 +58,4 @@ else
 fi
 
 popd
+service httpd restart

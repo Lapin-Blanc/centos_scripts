@@ -1,8 +1,52 @@
 #!/bin/bash
-USER_NAME=fabien
 VIRTUAL_ENV=django16
 PROJECT_NAME=mysite
 VIRTUAL_HOST_DOMAIN=fabien.toune.be
+
+function usage {
+    echo "$0 [OPTIONS] où les options sont :
+        -u | --user        : nom d'utilisateur du projet
+        -p | --password    : mot de passe webdav
+        -h | --help        : cette aide
+    "
+}
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -u | --user )           shift
+                                USER_NAME=$1
+                                ;;
+        -p | --password )       shift
+                                PASSWORD=$1
+                                ;;
+        -h | --help )           usage
+                                exit
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
+
+VALID_USER_RE='^[a-zA-Z][a-zA-Z0-9_\-]{3,}$'
+while [[ ! $USER_NAME =~ $VALID_USER_RE ]]
+do
+        read -p "$(echo -e \"Nom d'utilisateur : \")" USER_NAME
+done
+
+while [ -z $PASSWORD ]
+do
+        read -s -p "$(echo -e \"Mot de passe webdav: \")" PASS1
+        read -s -p "$(echo -e \"\nMot de passe (vérification): \")" PASS2
+        while [ "$PASS1" != "$PASS2" ]
+        do
+                echo -e "\nles mots de passe ne concordent pas..."
+                read -s -p "$(echo -e \"Mot de passe webdav: \")" PASS1
+                read -s -p "$(echo -e \"\nMot de passe (vérification): \")" PASS2
+        done
+        PASSWORD=$PASS1
+        echo -e "\n"
+done
 
 # Active les virtual hosts et WSGISocketPrefix
 sed -i "s/^\(\s*\)#\s*\(NameVirtualHost.*\)$/\1\2/" /etc/httpd/conf/httpd.conf
@@ -21,6 +65,7 @@ fi
 mkdir -p /home/webdav
 chown apache:apache /home/webdav
 ln -s /home/$USERNAME/ /home/webdav/$USERNAME
+(echo -n "$USER_NAME:WebDAV:" && echo -n "$USER_NAME:WebDAV:$PASSWORD" | md5sum | awk '{print $1}' ) >> /etc/httpd/conf/webdav.users.pwd
 
 echo "
 <VirtualHost *:80>
@@ -30,9 +75,9 @@ echo "
     ErrorLog logs/$VIRTUAL_HOST_DOMAIN-error
     CustomLog logs/$VIRTUAL_HOST_DOMAIN-access common
 
-    Alias /webdav/ /home/webdav/$USERNAME/
-    Alias /webdav /home/webdav/$USERNAME/
-    <Directory /home/webdav/$USERNAME/>
+    Alias /webdav/ /home/webdav/$USER_NAME/
+    Alias /webdav /home/webdav/$USER_NAME/
+    <Directory /home/webdav/$USER_NAME/>
         Dav On
         AuthType Digest
         AuthName \"WebDAV\"
@@ -41,7 +86,7 @@ echo "
         Options +Indexes
         IndexOptions FancyIndexing
         AddDefaultCharset UTF-8
-        Require user $USERNAME
+        Require user $USER_NAME
         Order allow,deny
         Allow from all
     </Directory>

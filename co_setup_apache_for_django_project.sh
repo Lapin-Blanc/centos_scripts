@@ -1,7 +1,4 @@
 #!/bin/bash
-VIRTUAL_ENV=django16
-PROJECT_NAME=mysite
-VIRTUAL_HOST_DOMAIN=fabien.toune.be
 
 function usage {
     echo "$0 [OPTIONS] où les options sont :

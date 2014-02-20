@@ -58,8 +58,6 @@ echo $USERNAME:$PASSWORD | chpasswd
 # - Configuration de python et des virtualenvs
 # - Configuration du site personnel
 
-chmod 711 /home/$USERNAME
-
 if grep -q -e "Customize the prompt" /home/$USERNAME/.bashrc
 then
     echo "Prompt already customized"
@@ -97,11 +95,12 @@ then
 fi
 
 # Configuration du site personnel
+# Préparation des accès WebDAV
+chown $USERNAME:apache /home/$USERNAME
+chmod g+wxs /home/$USERNAME
 mkdir -p /home/$USERNAME/public_html
+
 echo "<h2>Page d'accueil de $USERNAME</h2>" > /home/$USERNAME/public_html/index.html
-chmod 711 /home/$USERNAME
-chmod 755 /home/$USERNAME/public_html
-chown -R $USERNAME:$USERNAME /home/$USERNAME/public_html
 
 # Configuration des répertoires virtuels
 if ! grep -s -e "<Directory /home/*/public_html>" /etc/httpd/conf/httpd.conf

@@ -97,7 +97,7 @@ fi
 # Configuration du site personnel
 # Préparation des accès WebDAV
 chown $USERNAME:apache /home/$USERNAME
-chmod g+wxs /home/$USERNAME
+chmod g+rwxs /home/$USERNAME
 mkdir -p /home/$USERNAME/public_html
 
 echo "<h2>Page d'accueil de $USERNAME</h2>" > /home/$USERNAME/public_html/index.html

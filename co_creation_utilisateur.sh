@@ -98,9 +98,14 @@ fi
 # Préparation des accès WebDAV
 chown $USERNAME:apache /home/$USERNAME
 chmod g+rwxs /home/$USERNAME
-mkdir -p /home/$USERNAME/public_html
 
-echo "<h2>Page d'accueil de $USERNAME</h2>" > /home/$USERNAME/public_html/index.html
+su - $USERNAME << EOF
+cd
+mkdir django
+# ln -s ~/.virtualenvs/django16/lib/python2.7/site-packages/django/contrib/admin/static/admin/ ~/django/mysite/static/admin
+mkdir public_html
+echo "<h2>Page d'accueil de $USERNAME</h2>" > public_html/index.html
+EOF
 
 # Configuration des répertoires virtuels
 if ! grep -s -e "<Directory /home/*/public_html>" /etc/httpd/conf/httpd.conf

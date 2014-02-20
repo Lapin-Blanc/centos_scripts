@@ -134,5 +134,6 @@ echo "
         </Files>
     </Directory>
 </VirtualHost>" > /etc/httpd/conf.d/$VIRTUAL_HOST_DOMAIN.conf
-#fi
+
+service httpd restart
 

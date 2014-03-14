@@ -75,10 +75,11 @@ fi
 
 if which python2.7
 then
-    if ! grep -q -e "^alias python.*$" /home/$USERNAME/.bashrc
-    then
-        echo alias python=$(which python2.7) >> /home/$USERNAME/.bashrc
-    fi
+#    not needed as virtualenv will do the alias job...
+#    if ! grep -q -e "^alias python.*$" /home/$USERNAME/.bashrc
+#    then
+#        echo alias python=$(which python2.7) >> /home/$USERNAME/.bashrc
+#    fi
     if ! grep -q -e "^export VIRTUALENVWRAPPER_PYTHON.*$" /home/$USERNAME/.bashrc
     then
          echo export VIRTUALENVWRAPPER_PYTHON=$(which python2.7) >> /home/$USERNAME/.bashrc
